@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 父向子组件传递方法，使用事件绑定机制，v-on, 当自定义了一个事件属性之后， -->
+    <com2 v-on:func123="show"></com2>
+  </div>
+
+  <template id="tmp1">
+    <div>
+      <h1>这是个 子组件</h1>
+      <input type="button" value="这是子组件的按钮，点击触发调用父组件传递过来的方法" @click="myclick">
+    </div>
+  </template>
+
+  <script>
+
+    // 定义了一个字面量类型的组件模板对象
+    var com2 = {
+      template: '#tmp1', // 通过指定ID 表示要去加载 这个ID的template元素中的内容，当作组件的HTML结构
+      data() {
+        return {
+          sonmsg: { name: '大头儿子', age: 6 }
+        }
+      },
+      methods: {
+        myclick(){
+          // 如何拿到父组件传递的方法并调用此方法
+          // emit 是触发，调用
+          this.$emit('func123', this.sonmsg)
+        }
+      }
+    }
+
+    // 创建 Vue 实例得到 viewModel
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        datamsgFromSon: null,
+      },
+      methods: {
+        show(data) {
+          // console.log('调用了父组件的show方法: -- ' + data)
+          // console.log(data)
+          this.datamsgFromSon = data
+        }
+      },
+      components: {
+        com2
+      },
+    })
+  </script>
+  
+</body>
+</html>
